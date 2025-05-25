@@ -6,7 +6,7 @@
         class="upload-button"
         :auto-upload="false"
         :show-file-list="false"
-        :accept="'.jpg,.jpeg,.png'"
+        :accept="'.jpg,.jpeg,.png,.pdf'"
         :on-change="handleUploadChange"
         multiple
       >
@@ -73,6 +73,7 @@
 
 <script setup>
 import { ref, reactive, onMounted } from "vue";
+import * as pdfjsLib from 'pdfjs-dist';
 import { ElMessage, ElMessageBox, ElUpload, ElButton } from "element-plus";
 import JSZip from "jszip";
 import { saveAs } from "file-saver";
@@ -211,12 +212,82 @@ const handleUploadChange = async (uploadFile, uploadFiles) => {
   }
 
   if (uploadFiles.length === 1) {
-    const image = new Image();
-    image.src = URL.createObjectURL(uploadFiles[0].raw);
-    image.onload = () => {
-      drawImageOnCanvas(image);
-    };
-    imageUrl.value = URL.createObjectURL(uploadFiles[0].raw);
+    const file = uploadFiles[0].raw;
+    
+    if (file.type === 'application/pdf') {
+      ElMessage({
+        message: "正在处理PDF文件...",
+        type: "info",
+        duration: 0,
+      });
+
+      try {
+        const pdfData = await file.arrayBuffer();
+        const pdf = await pdfjsLib.getDocument({data: pdfData}).promise;
+        
+        // Create a canvas for each page and combine them
+        let totalHeight = 0;
+        let maxWidth = 0;
+        const pageCanvases = [];
+        
+        for (let i = 1; i <= pdf.numPages; i++) {
+          const page = await pdf.getPage(i);
+          const viewport = page.getViewport({scale: 1.0});
+          
+          const canvas = document.createElement('canvas');
+          const context = canvas.getContext('2d');
+          canvas.height = viewport.height;
+          canvas.width = viewport.width;
+          
+          await page.render({
+            canvasContext: context,
+            viewport: viewport
+          }).promise;
+          
+          totalHeight += viewport.height;
+          if (viewport.width > maxWidth) {
+            maxWidth = viewport.width;
+          }
+          
+          pageCanvases.push(canvas);
+        }
+        
+        // Combine all pages into one tall image
+        const combinedCanvas = document.createElement('canvas');
+        combinedCanvas.width = maxWidth;
+        combinedCanvas.height = totalHeight;
+        const combinedCtx = combinedCanvas.getContext('2d');
+        
+        let currentY = 0;
+        pageCanvases.forEach(canvas => {
+          combinedCtx.drawImage(canvas, 0, currentY);
+          currentY += canvas.height;
+        });
+        
+        const combinedImage = new Image();
+        combinedImage.src = combinedCanvas.toDataURL();
+        combinedImage.onload = () => {
+          drawImageOnCanvas(combinedImage);
+          imageUrl.value = combinedCanvas.toDataURL();
+          ElMessage.closeAll();
+          ElMessage({
+            message: "PDF处理完成！",
+            type: "success",
+          });
+        };
+      } catch (error) {
+        ElMessage.closeAll();
+        ElMessage.error("PDF处理失败");
+        console.error("PDF processing error:", error);
+      }
+    } else {
+      const image = new Image();
+      image.src = URL.createObjectURL(file);
+      image.onload = () => {
+        drawImageOnCanvas(image);
+      };
+      imageUrl.value = URL.createObjectURL(file);
+    }
   } else {
     ElMessage({
       message: "正在拼接图片...",
