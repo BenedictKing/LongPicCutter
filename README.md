@@ -1,7 +1,7 @@
 # 长图片自由分割/切割在线工具
 
-新版功能更全，长图，横图，宫格分割都支持。
-https://github.com/BenedictKing/LongPicCutter
+在线体验：
+https://long-pic-cutter.pages.dev
 
 ## 项目介绍
 
@@ -20,7 +20,7 @@ https://github.com/BenedictKing/LongPicCutter
 
 ##### 使用技术
 
-Vue3，element-plus，pnpm，file-saver，jszip, pdfjs-dist
+Vue3, element-plus, file-saver, jszip, pdfjs-dist
 
 ## 使用方法
 
