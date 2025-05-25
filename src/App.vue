@@ -738,10 +738,11 @@ onMounted(() => {
   align-items: flex-start;
   flex-wrap: wrap;
   width: 100%;
-  max-width: 1800px;
+  max-width: 100%;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 10px;
   gap: 30px;
+  box-sizing: border-box;
 }
 
 .image-box {
