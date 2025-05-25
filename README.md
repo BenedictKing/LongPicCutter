@@ -5,7 +5,7 @@ https://github.com/wumingluren/PicFreeCutter
 
 ## 项目介绍
 
-在网上闲逛的时候发现有人需要长图片自由分割工具，也没找到能用的，就想着自己写一个。本工具旨在提供一个简单易用的在线解决方案，用于将长图片或多张图片/PDF 页面拼接后的长图进行自由分割。
+本项目是 [wumingluren/LongPicCutter](https://github.com/wumingluren/LongPicCutter) 的一个 fork。在网上闲逛的时候发现有人需要长图片自由分割工具，也没找到能用的，就想着自己写一个。本工具旨在提供一个简单易用的在线解决方案，用于将长图片或多张图片/PDF 页面拼接后的长图进行自由分割。
 
 **主要功能：**
 
