@@ -80,7 +80,7 @@ import { saveAs } from "file-saver";
 
 const upload = ref(null);
 // 统一通过 CDN 加载 PDF.js worker
-pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.4.120/build/pdf.worker.min.js';
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@5.2.133/build/pdf.worker.min.js';
 
 const OpenUsageInstructions = () => {
   ElMessageBox.alert(
