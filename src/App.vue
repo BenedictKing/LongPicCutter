@@ -1,30 +1,55 @@
 <template>
   <div class="container">
     <div class="header">
-      <el-upload
-        ref="upload"
-        class="upload-button"
-        :auto-upload="false"
-        :show-file-list="false"
-        :accept="'.jpg,.jpeg,.png,.pdf'"
-        :on-change="handleUploadChange"
-        multiple
-      >
-        <el-button type="primary">点击选择图片</el-button>
-      </el-upload>
-      <el-button plain @click="OpenUsageInstructions">使用方法</el-button>
-      <el-button type="primary" class="mark-button" @click="addMark"
-        >标记</el-button
-      >
-      <el-button type="danger" class="undo-button" @click="undoMark"
-        >撤销</el-button
-      >
-      <el-button type="primary" class="cut-button" @click="handleCut"
-        >分割</el-button
-      >
-      <el-button type="primary" @click="handleDownload"
-        >下载切图压缩包</el-button
-      >
+      <div class="header-left">
+        <el-upload
+          ref="upload"
+          class="upload-button"
+          :auto-upload="false"
+          :show-file-list="false"
+          :accept="'.jpg,.jpeg,.png,.pdf'"
+          :on-change="handleUploadChange"
+          multiple
+        >
+          <el-button type="primary" :icon="Plus">选择图片</el-button>
+        </el-upload>
+        <el-button plain :icon="QuestionFilled" @click="OpenUsageInstructions">使用方法</el-button>
+      </div>
+    
+      <div class="header-right">
+        <el-button-group class="edit-group">
+          <el-button 
+            type="primary" 
+            class="mark-button" 
+            :icon="Position"
+            :disabled="!imageUrl" 
+            @click="addMark"
+          >标记</el-button>
+          <el-button 
+            type="danger" 
+            class="undo-button" 
+            :icon="Back"
+            :disabled="!imageUrl || marks.length === 0" 
+            @click="undoMark"
+          >撤销</el-button>
+        </el-button-group>
+      
+        <el-button-group class="output-group">
+          <el-button 
+            type="success" 
+            class="cut-button" 
+            :icon="Scissors"
+            :disabled="!imageUrl || marks.length === 0" 
+            @click="handleCut"
+          >分割</el-button>
+          <el-button 
+            type="success" 
+            :icon="Download"
+            :disabled="cutImages.length === 0" 
+            @click="handleDownload"
+          >下载切图</el-button>
+        </el-button-group>
+      </div>
     </div>
     <!-- @click="handleLineClick" -->
     <div class="content-box">
@@ -74,6 +99,14 @@
 
 <script setup>
 import { ref, reactive, onMounted } from "vue";
+import { 
+  Plus, 
+  QuestionFilled, 
+  Position, 
+  Back, 
+  Scissors, 
+  Download 
+} from '@element-plus/icons-vue';
 import * as pdfjsLib from "pdfjs-dist";
 import { ElMessage, ElMessageBox, ElUpload, ElButton } from "element-plus";
 import JSZip from "jszip";
@@ -635,11 +668,48 @@ onMounted(() => {
   top: 0px;
   z-index: 999;
   box-sizing: border-box;
-  padding: 20px;
-}
-
-.upload-button {
-  margin-bottom: 20px;
+  padding: 15px 20px;
+  background-color: #f5f7fa;
+  border-bottom: 1px solid #e4e7ed;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  
+  &-left, &-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+  
+  .edit-group, .output-group {
+    margin-left: 10px;
+  }
+  
+  :deep(.el-button) {
+    font-weight: 500;
+    
+    .el-icon {
+      margin-right: 4px;
+      font-size: 16px;
+    }
+  }
+  
+  .upload-button {
+    :deep(.el-button) {
+      position: relative;
+      background: linear-gradient(135deg, #409eff, #1890ff);
+      border: none;
+      transition: all 0.3s;
+      
+      &:hover {
+        background: linear-gradient(135deg, #66b1ff, #40a9ff);
+        transform: translateY(-1px);
+        box-shadow: 0 2px 8px rgba(0, 102, 255, 0.3);
+      }
+    }
+  }
 }
 
 .content-box {
