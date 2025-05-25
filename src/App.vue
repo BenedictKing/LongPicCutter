@@ -80,7 +80,7 @@ import { saveAs } from "file-saver";
 
 const upload = ref(null);
 // 统一通过 CDN 加载 PDF.js worker
-pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@5.2.133/build/pdf.worker.min.js';
+pdfjsLib.GlobalWorkerOptions.workerSrc = "/public/pdfjs-dist/pdf.worker.min.js";
 
 const OpenUsageInstructions = () => {
   ElMessageBox.alert(
@@ -297,9 +297,15 @@ const handleUploadChange = async (uploadFile, uploadFiles) => {
     }
   } else {
     // 检查多个文件中是否包含 PDF
-    const containsPdf = uploadFiles.some(f => f.raw.type === 'application/pdf' || f.name.toLowerCase().endsWith('.pdf'));
+    const containsPdf = uploadFiles.some(
+      (f) =>
+        f.raw.type === "application/pdf" ||
+        f.name.toLowerCase().endsWith(".pdf")
+    );
     if (containsPdf) {
-      ElMessage.warning("不支持在多文件上传中选择 PDF 文件。请单独上传 PDF，或只选择图片文件。");
+      ElMessage.warning(
+        "不支持在多文件上传中选择 PDF 文件。请单独上传 PDF，或只选择图片文件。"
+      );
       upload.value.clearFiles();
       imageUrl.value = null;
       const context = canvas.value.getContext("2d");
