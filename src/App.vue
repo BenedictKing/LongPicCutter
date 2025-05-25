@@ -38,7 +38,7 @@
           <el-button 
             type="success" 
             class="cut-button" 
-            :icon="Scissors"
+            :icon="Scissor"
             :disabled="!imageUrl || marks.length === 0" 
             @click="handleCut"
           >分割</el-button>
@@ -104,7 +104,7 @@ import {
   QuestionFilled, 
   Position, 
   Back, 
-  Scissors, 
+  Scissor,
   Download 
 } from '@element-plus/icons-vue';
 import * as pdfjsLib from "pdfjs-dist";
