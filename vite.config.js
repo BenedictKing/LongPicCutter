@@ -12,6 +12,9 @@ export default defineConfig(({ command, mode }) => {
 
   return {
     base: VITE_APP_BASE || "/",
+    build: {
+      assetsInlineLimit: 0, // Ensure PDF worker is not inlined
+    },
     plugins: [
       vue(),
       AutoImport({
