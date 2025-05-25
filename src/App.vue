@@ -735,12 +735,19 @@ onMounted(() => {
 .content-box {
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  width: 100%;
+  max-width: 1800px;
+  margin: 0 auto;
+  padding: 0 20px;
+  gap: 30px;
 }
 
 .image-box {
-  width: 800px; /* 图片盒子宽度 */
-  height: auto; /* 图片盒子高度根据图片高度 */
+  width: 100%;
+  max-width: 800px;
+  height: auto;
   border: 1px solid #e4e7ed;
   position: relative;
   margin: 20px 0;
@@ -748,6 +755,8 @@ onMounted(() => {
   justify-content: center;
   align-items: center;
   box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.12);
+  flex: 1;
+  min-width: 320px;
 }
 
 .image-canvas {
@@ -763,16 +772,16 @@ onMounted(() => {
 .cut-line {
   position: absolute;
   left: 0;
-  width: 800px; /* 与image-box宽度一致 */
+  width: 100%;
   height: 1px;
   background-color: black;
-  top: 300px; /* 默认悬浮位置 */
+  top: 300px;
   z-index: 9;
   cursor: ns-resize;
   transform: translateY(-50%);
-  display: flex; /* 使用flex布局 */
-  align-items: center; /* 垂直居中对齐 */
-  justify-content: flex-end; /* 水平方向上靠右对齐 */
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
 }
 
 .cut-line-marker {
@@ -798,7 +807,7 @@ onMounted(() => {
 }
 
 :global(.mark-box) {
-  width: 800px;
+  width: 100%;
   height: 30px;
   position: absolute;
   left: 50%;
@@ -812,7 +821,8 @@ onMounted(() => {
 }
 
 :global(.mark-line) {
-  width: 650px;
+  width: calc(100% - 200px);
+  min-width: 200px;
   height: 2px;
   background-color: red;
   margin: 0 10px;
@@ -824,8 +834,9 @@ onMounted(() => {
 }
 
 .img-preview {
-  width: 800px; /* 图片盒子宽度 */
-  height: auto; /* 图片盒子高度根据图片高度 */
+  width: 100%;
+  max-width: 800px;
+  height: auto;
   min-height: 300px;
   border: 1px solid #e4e7ed;
   position: relative;
@@ -833,11 +844,14 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   align-items: center;
-
   box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.12);
-  margin-left: 50px;
+  flex: 1;
+  min-width: 320px;
+  margin-left: 0;
+  
   .img-box {
-    width: 600px;
+    width: 100%;
+    max-width: 600px;
     img {
       width: 100%;
       height: 100%;
