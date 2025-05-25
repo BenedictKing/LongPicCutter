@@ -1,11 +1,11 @@
-# 无名长图片自由分割/切割在线工具
+# 长图片自由分割/切割在线工具
 
 新版功能更全，长图，横图，宫格分割都支持。
-https://github.com/wumingluren/PicFreeCutter
+https://github.com/BenedictKing/LongPicCutter
 
 ## 项目介绍
 
-本项目是 [wumingluren/LongPicCutter](https://github.com/wumingluren/LongPicCutter) 的一个 fork。在网上闲逛的时候发现有人需要长图片自由分割工具，也没找到能用的，就想着自己写一个。本工具旨在提供一个简单易用的在线解决方案，用于将长图片或多张图片/PDF 页面拼接后的长图进行自由分割。
+本项目是 [wumingluren/LongPicCutter](https://github.com/wumingluren/LongPicCutter) 的一个 fork。本工具旨在提供一个简单易用的在线解决方案，用于将长图片或多张图片/PDF 页面拼接后的长图进行自由分割。
 
 **主要功能：**
 
@@ -53,19 +53,10 @@ Vue3，element-plus，pnpm，file-saver，jszip, pdfjs-dist
 
 ## 地址
 
-无名长图片自由分割/切割在线工具
+长图片自由分割/切割在线工具
 
 在线体验：
-https://wumingluren.github.io/LongPicCutter
+https://long-pic-cutter.pages.dev
 
 源码地址：
-https://github.com/wumingluren/LongPicCutter
-
-使用[Pake](https://github.com/tw93/Pake)进行打包，有条件的朋友可以打一个 Mac 版的包
-
-Windows：
-https://pan.baidu.com/s/1mwvwEe59Pd3n2GJ15Cs6rg?pwd=axjm 提取码: axjm
-
-https://pan.quark.cn/s/a123822c02d4
-
-Mac：暂无 Windows 电脑打不了 Mac 的包
+https://github.com/BenedictKing/LongPicCutter
