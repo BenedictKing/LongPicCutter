@@ -73,10 +73,13 @@
 
 <script setup>
 import { ref, reactive, onMounted } from "vue";
-import * as pdfjsLib from 'pdfjs-dist';
+import * as pdfjsLib from "pdfjs-dist";
 import { ElMessage, ElMessageBox, ElUpload, ElButton } from "element-plus";
 import JSZip from "jszip";
 import { saveAs } from "file-saver";
+
+const upload = ref(null);
+pdfjsLib.GlobalWorkerOptions.workerSrc = "/pdf.worker.mjs";
 
 const OpenUsageInstructions = () => {
   ElMessageBox.alert(
@@ -213,8 +216,8 @@ const handleUploadChange = async (uploadFile, uploadFiles) => {
 
   if (uploadFiles.length === 1) {
     const file = uploadFiles[0].raw;
-    
-    if (file.type === 'application/pdf') {
+
+    if (file.type === "application/pdf") {
       ElMessage({
         message: "正在处理PDF文件...",
         type: "info",
@@ -223,47 +226,47 @@ const handleUploadChange = async (uploadFile, uploadFiles) => {
 
       try {
         const pdfData = await file.arrayBuffer();
-        const pdf = await pdfjsLib.getDocument({data: pdfData}).promise;
-        
+        const pdf = await pdfjsLib.getDocument({ data: pdfData }).promise;
+
         // Create a canvas for each page and combine them
         let totalHeight = 0;
         let maxWidth = 0;
         const pageCanvases = [];
-        
+
         for (let i = 1; i <= pdf.numPages; i++) {
           const page = await pdf.getPage(i);
-          const viewport = page.getViewport({scale: 1.0});
-          
-          const canvas = document.createElement('canvas');
-          const context = canvas.getContext('2d');
+          const viewport = page.getViewport({ scale: 1.0 });
+
+          const canvas = document.createElement("canvas");
+          const context = canvas.getContext("2d");
           canvas.height = viewport.height;
           canvas.width = viewport.width;
-          
+
           await page.render({
             canvasContext: context,
-            viewport: viewport
+            viewport: viewport,
           }).promise;
-          
+
           totalHeight += viewport.height;
           if (viewport.width > maxWidth) {
             maxWidth = viewport.width;
           }
-          
+
           pageCanvases.push(canvas);
         }
-        
+
         // Combine all pages into one tall image
-        const combinedCanvas = document.createElement('canvas');
+        const combinedCanvas = document.createElement("canvas");
         combinedCanvas.width = maxWidth;
         combinedCanvas.height = totalHeight;
-        const combinedCtx = combinedCanvas.getContext('2d');
-        
+        const combinedCtx = combinedCanvas.getContext("2d");
+
         let currentY = 0;
-        pageCanvases.forEach(canvas => {
+        pageCanvases.forEach((canvas) => {
           combinedCtx.drawImage(canvas, 0, currentY);
           currentY += canvas.height;
         });
-        
+
         const combinedImage = new Image();
         combinedImage.src = combinedCanvas.toDataURL();
         combinedImage.onload = () => {
@@ -295,7 +298,7 @@ const handleUploadChange = async (uploadFile, uploadFiles) => {
       duration: 0,
     });
 
-    const imagePromises = uploadFiles.map(file => {
+    const imagePromises = uploadFiles.map((file) => {
       return new Promise((resolve, reject) => {
         const img = new Image();
         img.onload = () => resolve(img);
@@ -309,20 +312,20 @@ const handleUploadChange = async (uploadFile, uploadFiles) => {
 
       let totalHeight = 0;
       let maxWidth = 0;
-      images.forEach(img => {
+      images.forEach((img) => {
         totalHeight += img.height;
         if (img.width > maxWidth) {
           maxWidth = img.width;
         }
       });
 
-      const combinedCanvas = document.createElement('canvas');
+      const combinedCanvas = document.createElement("canvas");
       combinedCanvas.width = maxWidth;
       combinedCanvas.height = totalHeight;
-      const combinedCtx = combinedCanvas.getContext('2d');
+      const combinedCtx = combinedCanvas.getContext("2d");
 
       let currentY = 0;
-      images.forEach(img => {
+      images.forEach((img) => {
         let offsetX = (maxWidth - img.width) / 2;
         combinedCtx.drawImage(img, offsetX, currentY, img.width, img.height);
         currentY += img.height;
