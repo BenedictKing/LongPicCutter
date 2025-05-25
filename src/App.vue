@@ -8,6 +8,7 @@
         :show-file-list="false"
         :accept="'.jpg,.jpeg,.png'"
         :on-change="handleUploadChange"
+        multiple
       >
         <el-button type="primary">点击选择图片</el-button>
       </el-upload>
@@ -196,13 +197,84 @@ const handleLineClick = (e) => {
 };
 
 // 选择图片
-const handleUploadChange = ({ raw }) => {
-  const image = new Image();
-  image.src = URL.createObjectURL(raw);
-  image.onload = () => {
-    drawImageOnCanvas(image);
-  };
-  imageUrl.value = URL.createObjectURL(raw);
+const handleUploadChange = async (uploadFile, uploadFiles) => {
+  if (!uploadFiles || uploadFiles.length === 0) {
+    imageUrl.value = null;
+    const context = canvas.value.getContext("2d");
+    context.clearRect(0, 0, canvas.value.width, canvas.value.height);
+    imageHeight.value = 300;
+    cutImages.value = [];
+    marks.value = [];
+    cutLines.value = [];
+    redrawMarks();
+    return;
+  }
+
+  if (uploadFiles.length === 1) {
+    const image = new Image();
+    image.src = URL.createObjectURL(uploadFiles[0].raw);
+    image.onload = () => {
+      drawImageOnCanvas(image);
+    };
+    imageUrl.value = URL.createObjectURL(uploadFiles[0].raw);
+  } else {
+    ElMessage({
+      message: "正在拼接图片...",
+      type: "info",
+      duration: 0,
+    });
+
+    const imagePromises = uploadFiles.map(file => {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => resolve(img);
+        img.onerror = reject;
+        img.src = URL.createObjectURL(file.raw);
+      });
+    });
+
+    try {
+      const images = await Promise.all(imagePromises);
+
+      let totalHeight = 0;
+      let maxWidth = 0;
+      images.forEach(img => {
+        totalHeight += img.height;
+        if (img.width > maxWidth) {
+          maxWidth = img.width;
+        }
+      });
+
+      const combinedCanvas = document.createElement('canvas');
+      combinedCanvas.width = maxWidth;
+      combinedCanvas.height = totalHeight;
+      const combinedCtx = combinedCanvas.getContext('2d');
+
+      let currentY = 0;
+      images.forEach(img => {
+        let offsetX = (maxWidth - img.width) / 2;
+        combinedCtx.drawImage(img, offsetX, currentY, img.width, img.height);
+        currentY += img.height;
+      });
+
+      const combinedImageDataUrl = combinedCanvas.toDataURL();
+      const combinedImage = new Image();
+      combinedImage.src = combinedImageDataUrl;
+      combinedImage.onload = () => {
+        drawImageOnCanvas(combinedImage);
+        imageUrl.value = combinedImageDataUrl;
+        ElMessage.closeAll();
+        ElMessage({
+          message: "多张图片已成功拼接！",
+          type: "success",
+        });
+      };
+    } catch (error) {
+      ElMessage.closeAll();
+      ElMessage.error("图片加载或拼接失败，请检查图片文件。");
+      console.error("Error stitching images:", error);
+    }
+  }
 };
 
 // 渲染图片
