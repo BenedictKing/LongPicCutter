@@ -113,11 +113,10 @@ import JSZip from "jszip";
 import { saveAs } from "file-saver";
 const upload = ref(null);
 
-// Configure ElMessage to appear below header
+// 获取当前实例 (可能在其他地方需要使用)
 const { proxy } = getCurrentInstance();
-ElMessage.setOptions({
-  offset: 70
-});
+// Element Plus 不支持 ElMessage.setOptions，改用全局样式来设置消息偏移
+// 现在已在 <style> 块中添加了 .el-message { top: 70px !important; }
 // 统一通过 CDN 加载 PDF.js worker
 pdfjsLib.GlobalWorkerOptions.workerSrc =
   "https://fastly.jsdelivr.net/npm/pdfjs-dist@5.2.133/build/pdf.worker.mjs";
