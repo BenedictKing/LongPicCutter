@@ -677,13 +677,28 @@ onMounted(() => {
   justify-content: space-between;
   align-items: center;
   
-  &-left, &-right {
+  &-left {
+    flex: 1;
     display: flex;
     align-items: center;
     gap: 15px;
   }
   
-  .edit-group, .output-group {
+  &-right {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 15px;
+  }
+  
+  .edit-group {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  
+  .output-group {
     margin-left: 10px;
   }
   
