@@ -77,13 +77,9 @@ import * as pdfjsLib from "pdfjs-dist";
 import { ElMessage, ElMessageBox, ElUpload, ElButton } from "element-plus";
 import JSZip from "jszip";
 import { saveAs } from "file-saver";
-import { URL } from "url";
-
 const upload = ref(null);
 // 统一通过 CDN 加载 PDF.js worker
-pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
-  "/public/pdfjs-dist/pdf.worker.min.js"
-);
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@5.2.133/build/pdf.worker.min.js';
 
 const OpenUsageInstructions = () => {
   ElMessageBox.alert(
