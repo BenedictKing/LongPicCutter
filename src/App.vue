@@ -79,13 +79,8 @@ import JSZip from "jszip";
 import { saveAs } from "file-saver";
 
 const upload = ref(null);
-// Use CDN version of PDF.js worker in production
-if (import.meta.env.PROD) {
-  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
-} else {
-  // In development, use the worker from node_modules
-  pdfjsLib.GlobalWorkerOptions.workerSrc = `${import.meta.env.BASE_URL}pdf.worker.mjs`;
-}
+// 统一通过 CDN 加载 PDF.js worker
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.4.120/build/pdf.worker.min.js';
 
 const OpenUsageInstructions = () => {
   ElMessageBox.alert(
