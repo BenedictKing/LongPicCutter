@@ -79,7 +79,7 @@ import JSZip from "jszip";
 import { saveAs } from "file-saver";
 
 const upload = ref(null);
-pdfjsLib.GlobalWorkerOptions.workerSrc = "/pdf.worker.mjs";
+pdfjsLib.GlobalWorkerOptions.workerSrc = `${import.meta.env.BASE_URL}pdf.worker.mjs`;
 
 const OpenUsageInstructions = () => {
   ElMessageBox.alert(
