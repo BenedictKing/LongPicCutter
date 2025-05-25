@@ -98,7 +98,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from "vue";
+import { ref, reactive, onMounted, getCurrentInstance } from "vue";
 import { 
   Plus, 
   QuestionFilled, 
@@ -112,6 +112,12 @@ import { ElMessage, ElMessageBox, ElUpload, ElButton } from "element-plus";
 import JSZip from "jszip";
 import { saveAs } from "file-saver";
 const upload = ref(null);
+
+// Configure ElMessage to appear below header
+const { proxy } = getCurrentInstance();
+ElMessage.setOptions({
+  offset: 70
+});
 // 统一通过 CDN 加载 PDF.js worker
 pdfjsLib.GlobalWorkerOptions.workerSrc =
   "https://fastly.jsdelivr.net/npm/pdfjs-dist@5.2.133/build/pdf.worker.mjs";
@@ -838,5 +844,12 @@ onMounted(() => {
       height: 100%;
     }
   }
+}
+</style>
+
+<style>
+/* Global style to position messages below header */
+.el-message {
+  top: 70px !important;
 }
 </style>
