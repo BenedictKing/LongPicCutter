@@ -471,16 +471,16 @@ const handleCut = () => {
     // 绘制原始图片到新canvas上
     cutContext.drawImage(originalImage, 0, 0);
 
-    // 排序
-    cutLines.value.sort((a, b) => a - b);
+    // 排序并创建一个本地副本用于切割，而不改变原始数组
+    const sortedCutLines = [...cutLines.value].sort((a, b) => a - b);
 
-    // const adjustedCutLines = cutLines.value.map((cutLineOnCanvas) =>
+    // const adjustedCutLines = sortedCutLines.map((cutLineOnCanvas) =>
     //   Math.round(cutLineOnCanvas / aspectRatio.value)
     // );
 
     // 假设 canvas.value.height 是 canvas 的高度
     // 计算每个切割部分的高度
-    const adjustedCutLines = cutLines.value.map((cutLineOnCanvas, index) => {
+    const adjustedCutLines = sortedCutLines.map((cutLineOnCanvas, index) => {
       // 原始图片的宽度和高度
       const originalWidth = originalImage.width;
       const originalHeight = originalImage.height;
@@ -538,9 +538,9 @@ const handleCut = () => {
 
     cutImages.value = cutParts;
     console.log(cutParts, "切完了", cutImages.value);
-    // 清空cutLines数组，以便重新开始切割
-    cutLines.value = [];
-    marks.value = [];
+    // 不再清空marks和cutLines数组，保留标记以便可以撤销
+    // cutLines.value = [];
+    // marks.value = [];
 
     ElMessage({
       message: "切图成功！",
