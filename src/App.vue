@@ -856,6 +856,7 @@ onMounted(() => {
   flex: 1;
   min-width: 320px;
   margin-left: 0;
+  gap: 3px;
 
   .img-box {
     width: 100%;
