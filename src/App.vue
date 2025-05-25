@@ -253,7 +253,7 @@ const handleUploadChange = async (uploadFile, uploadFiles) => {
 
         for (let i = 1; i <= pdf.numPages; i++) {
           const page = await pdf.getPage(i);
-          const viewport = page.getViewport({ scale: 1.0 });
+          const viewport = page.getViewport({ scale: 2.0 }); // Increased scale for better quality
 
           const canvas = document.createElement("canvas");
           const context = canvas.getContext("2d");
