@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "build:github": "vite build --mode github",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy:cf-pages": "npm build && wrangler pages deploy dist"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.1",
