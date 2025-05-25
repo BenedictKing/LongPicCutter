@@ -32,6 +32,7 @@
         ref="imageBox"
         class="image-box"
         :style="{ height: imageHeight + 'px' }"
+        @click="handleImageClick"
       >
         <template v-if="!imageUrl">
           <el-empty description="请选择图片" />
@@ -194,11 +195,27 @@ const redrawMarks = () => {
   });
 };
 
-// 点击标点
-const handleLineClick = (e) => {
+// 点击图片区域移动分割线
+const handleImageClick = (event) => {
+  if (!imageUrl.value) { // 只有在有图片时才处理点击
+    return;
+  }
+
+  // 检查点击事件的目标是否是拖动条本身或其子元素
+  if (event.target.closest('.cut-line')) {
+    return;
+  }
+
   const rect = imageBox.value.getBoundingClientRect();
-  // 取整并更新cutLinePosition
-  cutLinePosition.value = Math.round(e.clientY - rect.top);
+  let newPosition = Math.round(event.clientY - rect.top);
+
+  // 确保新位置在有效范围内
+  const minPosition = 0;
+  const maxPosition = imageBox.value.clientHeight;
+  
+  newPosition = Math.max(minPosition, Math.min(newPosition, maxPosition));
+
+  cutLinePosition.value = newPosition;
 };
 
 // 选择图片
