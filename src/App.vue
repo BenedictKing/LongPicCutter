@@ -13,41 +13,47 @@
         >
           <el-button type="primary" :icon="Plus">选择图片</el-button>
         </el-upload>
-        <el-button plain :icon="QuestionFilled" @click="OpenUsageInstructions">使用方法</el-button>
+        <el-button plain :icon="QuestionFilled" @click="OpenUsageInstructions"
+          >使用方法</el-button
+        >
       </div>
-    
+
       <div class="header-right">
         <el-button-group class="edit-group">
-          <el-button 
-            type="primary" 
-            class="mark-button" 
+          <el-button
+            type="primary"
+            class="mark-button"
             :icon="Position"
-            :disabled="!imageUrl" 
+            :disabled="!imageUrl"
             @click="addMark"
-          >标记</el-button>
-          <el-button 
-            type="danger" 
-            class="undo-button" 
+            >标记</el-button
+          >
+          <el-button
+            type="danger"
+            class="undo-button"
             :icon="Back"
-            :disabled="!imageUrl || marks.length === 0" 
+            :disabled="!imageUrl || marks.length === 0"
             @click="undoMark"
-          >撤销</el-button>
+            >撤销</el-button
+          >
         </el-button-group>
-      
+
         <el-button-group class="output-group">
-          <el-button 
-            type="success" 
-            class="cut-button" 
+          <el-button
+            type="success"
+            class="cut-button"
             :icon="Scissor"
-            :disabled="!imageUrl || marks.length === 0" 
+            :disabled="!imageUrl || marks.length === 0"
             @click="handleCut"
-          >分割</el-button>
-          <el-button 
-            type="success" 
+            >分割</el-button
+          >
+          <el-button
+            type="success"
             :icon="Download"
-            :disabled="cutImages.length === 0" 
+            :disabled="cutImages.length === 0"
             @click="handleDownload"
-          >下载切图</el-button>
+            >下载切图</el-button
+          >
         </el-button-group>
       </div>
     </div>
@@ -99,14 +105,14 @@
 
 <script setup>
 import { ref, reactive, onMounted, getCurrentInstance } from "vue";
-import { 
-  Plus, 
-  QuestionFilled, 
-  Position, 
-  Back, 
+import {
+  Plus,
+  QuestionFilled,
+  Position,
+  Back,
   Scissor,
-  Download 
-} from '@element-plus/icons-vue';
+  Download,
+} from "@element-plus/icons-vue";
 import * as pdfjsLib from "pdfjs-dist";
 import { ElMessage, ElMessageBox, ElUpload, ElButton } from "element-plus";
 import JSZip from "jszip";
@@ -235,12 +241,13 @@ const redrawMarks = () => {
 
 // 点击图片区域移动分割线
 const handleImageClick = (event) => {
-  if (!imageUrl.value) { // 只有在有图片时才处理点击
+  if (!imageUrl.value) {
+    // 只有在有图片时才处理点击
     return;
   }
 
   // 检查点击事件的目标是否是拖动条本身或其子元素
-  if (event.target.closest('.cut-line')) {
+  if (event.target.closest(".cut-line")) {
     return;
   }
 
@@ -250,7 +257,7 @@ const handleImageClick = (event) => {
   // 确保新位置在有效范围内
   const minPosition = 0;
   const maxPosition = imageBox.value.clientHeight;
-  
+
   newPosition = Math.max(minPosition, Math.min(newPosition, maxPosition));
 
   cutLinePosition.value = newPosition;
@@ -681,14 +688,14 @@ onMounted(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  
+
   &-left {
     flex: 1;
     display: flex;
     align-items: center;
     gap: 15px;
   }
-  
+
   &-right {
     flex: 1;
     display: flex;
@@ -696,33 +703,33 @@ onMounted(() => {
     justify-content: flex-end;
     gap: 15px;
   }
-  
+
   .edit-group {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
   }
-  
+
   .output-group {
     margin-left: 10px;
   }
-  
+
   :deep(.el-button) {
     font-weight: 500;
-    
+
     .el-icon {
       margin-right: 4px;
       font-size: 16px;
     }
   }
-  
+
   .upload-button {
     :deep(.el-button) {
       position: relative;
       background: linear-gradient(135deg, #409eff, #1890ff);
       border: none;
       transition: all 0.3s;
-      
+
       &:hover {
         background: linear-gradient(135deg, #66b1ff, #40a9ff);
         transform: translateY(-1px);
@@ -740,7 +747,7 @@ onMounted(() => {
   width: 100%;
   max-width: 100%;
   margin: 0 auto;
-  padding: 0 10px;
+  padding: 0 20px;
   gap: 30px;
   box-sizing: border-box;
 }
@@ -849,7 +856,7 @@ onMounted(() => {
   flex: 1;
   min-width: 320px;
   margin-left: 0;
-  
+
   .img-box {
     width: 100%;
     max-width: 600px;
