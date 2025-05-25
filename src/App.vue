@@ -263,7 +263,8 @@ const handleUploadChange = async (uploadFile, uploadFiles) => {
 
         let currentY = 0;
         pageCanvases.forEach((canvas) => {
-          combinedCtx.drawImage(canvas, 0, currentY);
+          let offsetX = (maxWidth - canvas.width) / 2;
+          combinedCtx.drawImage(canvas, offsetX, currentY);
           currentY += canvas.height;
         });
 
@@ -282,6 +283,8 @@ const handleUploadChange = async (uploadFile, uploadFiles) => {
         ElMessage.closeAll();
         ElMessage.error("PDF处理失败");
         console.error("PDF processing error:", error);
+        upload.value.clearFiles();
+        imageUrl.value = null;
       }
     } else {
       const image = new Image();
@@ -292,6 +295,22 @@ const handleUploadChange = async (uploadFile, uploadFiles) => {
       imageUrl.value = URL.createObjectURL(file);
     }
   } else {
+    // 检查多个文件中是否包含 PDF
+    const containsPdf = uploadFiles.some(f => f.raw.type === 'application/pdf' || f.name.toLowerCase().endsWith('.pdf'));
+    if (containsPdf) {
+      ElMessage.warning("不支持在多文件上传中选择 PDF 文件。请单独上传 PDF，或只选择图片文件。");
+      upload.value.clearFiles();
+      imageUrl.value = null;
+      const context = canvas.value.getContext("2d");
+      context.clearRect(0, 0, canvas.value.width, canvas.value.height);
+      imageHeight.value = 300;
+      cutImages.value = [];
+      marks.value = [];
+      cutLines.value = [];
+      redrawMarks();
+      return;
+    }
+
     ElMessage({
       message: "正在拼接图片...",
       type: "info",
